@@ -44,6 +44,8 @@ File me [[https://github.com/dennyzhang/cheatsheet-kubernetes-A4/issues][Issues]
 | Use minikube dockerd in your laptop  | =eval $(minikube docker-env)=, No need to push docker hub any more     |
 | Get services sorted by name          | kubectl get services --sort-by=.metadata.name                          |
 | Get pods sorted by restart count     | kubectl get pods --sort-by='.status.containerStatuses[0].restartCount' |
+| List all container images            | [[https://github.com/dennyzhang/cheatsheet-kubernetes-A4/blob/master/list-all-images.sh][list-all-images.sh]]                                                     |
+| Reference                            | [[https://github.com/kubernetes/kubernetes/tags][GitHub: kubernetes releases]]                                            |
 | Reference                            | [[https://cheatsheet.dennyzhang.com/cheatsheet-minikube-A4][minikube cheatsheet]], [[https://cheatsheet.dennyzhang.com/cheatsheet-docker-A4][docker cheatsheet]]                                 |
 ** Check Performance
 | Name                                         | Command                                              |
@@ -141,6 +143,12 @@ File me [[https://github.com/dennyzhang/cheatsheet-kubernetes-A4/issues][Issues]
 | Expose deployment as lb service | =kubectl expose deployment/my-app --type=LoadBalancer --name=my-service=          |
 | Expose service as lb service    | =kubectl expose service/wordpress-1-svc --type=LoadBalancer --name=wordpress-lb=  |
 | Kubernetes Yaml Examples        | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                                                   |
+** Secrets
+| Name                        | Command                                                                 |
+|-----------------------------+-------------------------------------------------------------------------|
+| List secrets                | =kubectl get secrets --all-namespaces=                                  |
+| Create secret from cfg file | =kubectl create secret generic db-user-pass --from-file=./username.txt= |
+| Kubernetes Yaml Examples    | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                                         |
 ** StatefulSet
 | Name                               | Command                                                  |
 |------------------------------------+----------------------------------------------------------|
@@ -149,13 +157,14 @@ File me [[https://github.com/dennyzhang/cheatsheet-kubernetes-A4/issues][Issues]
 | Scale statefulset                  | =kubectl scale sts/<stateful_set_name> --replicas=5=     |
 | Kubernetes Yaml Examples           | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                          |
 ** Volumes & Volume Claims
-| Name                      | Command                                            |
-|---------------------------+----------------------------------------------------|
-| Check the mounted volumes | =kubectl exec storage ls /data=                    |
-| Check persist volume      | =kubectl describe pv/pv0001=                       |
-| List storage class        | =kubectl get storageclass=                         |
-| Copy files                | =kubectl cp /tmp/foo <namespace1>/<pod1>:/tmp/bar= |
-| Kubernetes Yaml Examples  | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                    |
+| Name                      | Command                                                      |
+|---------------------------+--------------------------------------------------------------|
+| List storage class        | =kubectl get storageclass=                                   |
+| Check the mounted volumes | =kubectl exec storage ls /data=                              |
+| Check persist volume      | =kubectl describe pv/pv0001=                                 |
+| Copy local file to pod    | =kubectl cp /tmp/my <some-namespace>/<some-pod>:/tmp/server= |
+| Copy pod file to local    | =kubectl cp <some-namespace>/<some-pod>:/tmp/server /tmp/my= |
+| Kubernetes Yaml Examples  | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                              |
 ** Events & Metrics
 | Name                            | Command                                                    |
 |---------------------------------+------------------------------------------------------------|
@@ -168,15 +177,16 @@ File me [[https://github.com/dennyzhang/cheatsheet-kubernetes-A4/issues][Issues]
 | Mark node as schedulable                  | =kubectl uncordon $NDOE_NAME= |
 | Drain node in preparation for maintenance | =kubectl drain $NODE_NAME=    |
 ** Namespace & Security
-| Name                          | Command                                         |
-|-------------------------------+-------------------------------------------------|
-| List authenticated contexts   | =kubectl config get-contexts=, =~/.kube/config= |
-| Load context from config file | =kubectl get cs --kubeconfig kube_config.yml=   |
-| Switch context                | =kubectl config use-context <cluster-name>=     |
-| Delete the specified context  | =kubectl config delete-context <cluster-name>=  |
-| List all namespaces defined   | =kubectl get namespaces=                        |
-| List certificates             | =kubectl get csr=                               |
-| Kubernetes Yaml Examples      | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                 |
+| Name                          | Command                                                                                |
+|-------------------------------+----------------------------------------------------------------------------------------|
+| List authenticated contexts   | =kubectl config get-contexts=, =~/.kube/config=                                        |
+| Load context from config file | =kubectl get cs --kubeconfig kube_config.yml=                                          |
+| Switch context                | =kubectl config use-context <cluster-name>=                                            |
+| Delete the specified context  | =kubectl config delete-context <cluster-name>=                                         |
+| List all namespaces defined   | =kubectl get namespaces=                                                               |
+| Set namespace preference      | =kubectl config set-context $(kubectl config current-context) --namespace=<namespace>= |
+| List certificates             | =kubectl get csr=                                                                      |
+| Kubernetes Yaml Examples      | [[https://cheatsheet.dennyzhang.com/kubernetes-yaml-templates][Link: kubernetes yaml templates]]                                                        |
 ** Network
 | Name                              | Command                                                  |
 |-----------------------------------+----------------------------------------------------------|
